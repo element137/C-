@@ -1,0 +1,52 @@
+1.字符串逆序（递归实现）。
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+void str_reverse (char * left,char *right)
+{
+           char tmp = '0';
+           int len = 0;
+           tmp = *left ;
+          * left++ = *right ;
+          * right = '\0' ;
+           len = strlen (left)-1;
+           if(len >=0)
+                    str_reverse(left ,left+ len);
+          * right = tmp ;
+}
+
+int main ()
+{
+           char str [] = "abcdef";
+           int len = strlen( str)-1;
+           str_reverse(str ,str+ len);
+           printf("%s\n" ,str);
+           return 0 ;
+}
+
+2.求第n个斐波那契数（非递归实现）
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int fib (int num )
+{
+           int a = 1;
+           int b = 1;
+           int ret = 0;
+           if(num <3)
+                    return 1;
+           num -= 2;
+           while(num --)
+          {
+                    ret = a +b;
+                    a = b ;
+                    b = ret ;
+          }
+           return ret ;
+}
+int main ()
+{
+           int n = 0;
+           scanf ("%d" ,&n);
+           printf("%d\n" ,fib( n));
+           return 0;
+}
