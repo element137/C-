@@ -1,0 +1,32 @@
+strlen：
+1）指针相减
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int my_strlen(const char* arr,int len)
+{
+	int ret = 0;
+	const char *end = arr+len-1;
+	return end-arr; 
+}
+int main ()
+{
+	char arr[] = "abcde";
+	printf("%d\n",my_strlen(arr,sizeof(arr)/sizeof(arr[0])));
+	return 0;
+}
+2）递归
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int my_strlen(char *arr)
+{
+	if(*arr == '\0')
+		return 0;
+	else
+		return 1+my_strlen(arr+1);
+}
+int main ()
+{
+	char arr[] = "abcde";
+	printf("%d\n",my_strlen(arr));
+	return 0;
+}

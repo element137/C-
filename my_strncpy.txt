@@ -1,0 +1,30 @@
+char* my_strncpy(char *dest, const char *src, size_t sz)
+{
+	char *ret = dest;
+	assert(dest != NULL);
+	assert(src != NULL);
+	while(sz && *src)
+	{
+		*dest++ = *src++;
+		sz--;
+	}
+	if(sz != 0)
+	{
+		while(sz)
+		{
+			*dest++ = '\0';
+			sz--;
+		}
+	}
+	return ret;
+}
+int main()
+{
+	int i = 0;
+	char arr[] = "abcdefghiqwer";
+	my_strncpy(arr, "12345", 3);
+	for ( i = 0; i< sizeof(arr)/sizeof(arr[0]);i ++)
+		printf("%c",arr[i]);
+	printf("\n");
+	return 0;
+}
