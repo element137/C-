@@ -1,0 +1,24 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<assert.h>
+int my_strncmp(const char*str1, const char*str2, int count)
+{
+	assert(str1);
+	assert(str2);
+	while((count-1) && *str1 == *str2)
+	{
+		if(*str1 == '\0')
+			return 0;
+		str1++;
+		str2++;
+		count--;
+	}
+	return *str1-*str2;
+
+}
+int main()
+{
+	int ret = my_strncmp("abcdef","ad", 10);
+	printf("%d\n", ret);
+	return 0;
+}
