@@ -1,0 +1,55 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int Add(int a, int b)
+{
+	return a + b;
+}
+int Sub(int a, int b)
+{
+	return a - b;
+}
+int Mul(int a, int b)
+{
+	return a*b;
+}
+int Div(int a, int b)
+{
+	return a / b;
+}
+void menu()
+{
+	printf( "*************************\n" );
+	printf( " 1:add 2:sub \n" );
+	printf( " 3:mul 4:div 0.Exit\n" );
+	printf( "*************************\n" );
+}
+enum OP
+{
+	EXIT,
+	ADD,
+	SUB,
+	MUL,
+	DIV
+};
+int main()
+{
+	int input = 1;
+	int a = 0;
+	int b = 0;
+	int ret = 0;
+	int (*pfunArr[5])(int,int)={0,Add,Sub,Mul,Div};
+	menu();
+	while (input)
+	{
+		printf(">:");
+		scanf( "%d", &input);
+		if(input)
+		{
+			printf("enter two number:");
+			scanf ("%d %d",&a,&b);
+			ret = pfunArr[input](a,b);
+			printf( "ret = %d\n", ret);
+		}
+	}
+	return 0;
+}
