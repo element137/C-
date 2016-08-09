@@ -1,0 +1,245 @@
+ 头文件：head.h
+ #define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_NAME 20
+#define MAX_SEX 5
+#define MAX_ADDR 20
+#define MAX_TEL 15
+#define MAX 1000
+
+typedef struct People
+{
+	char name[MAX_NAME];
+	char sex[MAX_SEX];
+	int age;
+	char tel[MAX_TEL];
+	char addr[MAX_ADDR];
+}Peo;
+
+typedef struct Contact
+{
+	Peo man[MAX];
+	int len;
+}Con, *Pcon;
+
+void InitContact(Pcon pcon);
+void ShowContact(Pcon pcon);
+void AddContact(Pcon pcon);
+void SearchContact(Pcon pcon);
+void  DelContact(Pcon pcon);
+void ModiContact(Pcon pcon);
+void EmptyContact(Pcon pcon);
+void SortContact(Pcon pcon );
+
+测试函数：
+#define _CRT_SECURE_NO_WARNINGS
+#include "head.h"
+enum OP
+{
+	EXIT,
+	ADD,
+	DEL,
+	SEARCH,
+	MODIFY,
+	SHOW,
+	EMPTY,
+	SORT
+};
+void menu()
+{
+	printf("************************************************************** \n");
+	printf("********* 1.添加联系人信息       2.删除指定联系人信息*********\n");
+	printf("********* 3.查找指定联系人信息   4.修改指定联系人信息*********\n");
+	printf("********* 5.显示所有联系人信息   6.清空所有联系人    *********\n");
+	printf("********* 7.以名字排序所有联系人 0.退出              *********\n");
+	printf("************************************************************** \n");
+}
+int main ()
+{
+	int input = 0;
+	Con my_con ;
+	InitContact(&my_con);
+	do 
+	{
+		menu();
+		printf("请选择：");
+		scanf("%d",&input);
+		switch(input)
+		{
+		case ADD:
+			AddContact(&my_con);
+			break;
+		case DEL:
+			DelContact(&my_con);
+			break;
+		case SEARCH:
+			SearchContact(&my_con);
+			break;
+		case MODIFY:
+			ModiContact(&my_con);
+			break;
+		case SHOW:
+			ShowContact(&my_con);
+			break;
+		case EMPTY:
+			EmptyContact(&my_con);
+			break;
+		case SORT:
+			SortContact(&my_con );
+			break;
+		case EXIT:
+			break;
+		default:
+			break;
+		}
+	} while (input);
+	printf("欢迎使用\n");
+	return 0;
+}
+
+功能函数：
+#define _CRT_SECURE_NO_WARNINGS
+#include "head.h"
+int Find_peo(Pcon pcon)
+{
+	char name[MAX_NAME] = " ";
+	int i = 0;
+	int sub = 0;
+	printf("输入要查找的姓名:");
+	scanf("%s",name);
+	for( ;i<pcon->len;i++ )
+	{
+		if( strcmp(name,pcon->man[i].name) == 0 )
+		{
+			return sub= i;
+		}
+	}
+	return -1;
+}
+void ModiContact(Pcon pcon)
+{
+	int sub = 0;
+	sub = Find_peo(pcon);
+	if(sub == -1)
+	{
+		printf("不存在\n");
+		return;
+	}
+	printf("name:");
+	scanf("%s",pcon->man[sub].name);
+	printf("sex:");
+	scanf("%s",pcon->man[sub ].sex);
+	printf("age:");
+	scanf("%d",&pcon->man[sub].age);
+	printf("tel:");
+	scanf("%s",pcon->man[sub].tel);
+	printf("addr:");
+	scanf("%s",pcon->man[sub].addr);
+	printf("Ok\n");
+}
+void DelContact(Pcon pcon)
+{
+	int sub =0;
+	sub = Find_peo(pcon);
+	if(sub == -1)
+	{
+		printf("不存在\n");
+		return ;
+	}
+	printf("%10s\t%5s\t%5s\t%12s\t%12s\t\n","name","sex","age","tel","addr");
+	printf("%10s\t%5s\t%5d\t%12s\t%12s\t\n",pcon->man[sub].name, pcon->man[sub].sex, pcon->man[sub].age, pcon->man[sub].tel, pcon->man[sub].addr);
+	memmove(&(pcon->man[sub]),&(pcon->man[pcon->len-1]),sizeof(Peo));
+	pcon->len--;		
+	printf("Ok\n");
+ 
+}
+void EmptyContact(Pcon pcon)
+{
+	pcon->len  = 0;
+	printf("OK\n");
+}
+void SearchContact(Pcon pcon)
+{
+	int sub = 0;
+	sub = Find_peo(pcon);
+	if(sub != -1)
+	{
+		printf("%10s\t%5s\t%5s\t%12s\t%12s\t\n","name","sex","age","tel","addr");
+		printf("%10s\t%5s\t%5d\t%12s\t%12s\t\n",pcon->man[sub].name, pcon->man[sub].sex, pcon->man[sub].age, pcon->man[sub].tel, pcon->man[sub].addr);
+	}
+	else
+	{
+		printf("not exist\n");
+	}
+}
+void InitContact(Pcon pcon)
+{
+	memset(pcon->man, 0 ,MAX*sizeof(Peo));
+	pcon->len = 0;
+};
+
+void ShowContact(Pcon pcon)
+{
+	if(pcon->len == 0)
+	{
+		printf("电话本为空\n");
+	}
+	else 
+	{
+		int i = 0;
+		printf("%10s\t%5s\t%5s\t%12s\t%12s\t\n","name","sex","age","tel","addr");
+		for( ;i<pcon->len;i++ )
+		{
+			printf("%10s\t%5s\t%5d\t%12s\t%12s\t\n",pcon->man[i].name, pcon->man[i].sex, pcon->man[i].age, pcon->man[i].tel, pcon->man[i].addr);
+		}
+	}
+}
+void AddContact(Pcon pcon)
+{
+	if(pcon->len == MAX)
+	{
+		printf("电话本已满\n");
+	}
+	else 
+	{
+		printf("name:");
+		scanf("%s",pcon->man[pcon->len].name);
+		printf("sex:");
+		scanf("%s",pcon->man[pcon->len].sex);
+		printf("age:");
+		scanf("%d",&pcon->man[pcon->len].age);
+		printf("tel:");
+		scanf("%s",pcon->man[pcon->len].tel);
+		printf("addr:");
+		scanf("%s",pcon->man[pcon->len].addr);
+		(pcon->len)++;
+		printf("Ok\n");
+	}
+}
+void SortContact(Pcon pcon )
+{
+	int i = 0;
+	int j = 0;
+	Peo tmp = {0};
+	int flag = pcon->len;
+	while(flag--)
+	{
+		for( i=0;i<(pcon->len)-1;i++ )
+		{
+			for( j=0;j<(pcon->len)-i-1;j++ )
+			{
+				if(strcmp( pcon->man[i].name,pcon->man[i+1].name )>0 )
+				{
+					memmove(&tmp,&(pcon->man[i]),sizeof(Peo));
+					memmove(&(pcon->man[i]),&(pcon->man[i+1]),sizeof(Peo));
+					memmove(&(pcon->man[i+1]),&tmp,sizeof(Peo));
+				}
+			}
+		}
+	}
+	printf("OK\n");
+}
