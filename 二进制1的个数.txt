@@ -1,0 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#define length 30
+int count_one_bits(unsigned int a )
+{
+    unsigned int b;
+     int array[length];
+     int count=0,i=0;
+     while(a!=0)
+     {
+          b=a%2;
+          if(b==1)
+               count++;
+          a=a/2;
+          array[i]=b;
+          i++;
+     }
+     for(;i>0;i--)
+          printf("%d",array[i-1]);
+     printf("\n");
+     return count;
+}
+int main()
+{
+     unsigned int num=0;
+     printf("please enter a intger:");
+     scanf("%d",&num);
+     printf("一共有%d个1.\n",count_one_bits(num));
+     return 0;
+}
