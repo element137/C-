@@ -1,0 +1,53 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+enum PG
+{
+     EXIT,
+     PLAY
+};
+void menu()
+{
+     printf("======1.play======\n");
+     printf("======0.exit======\n");
+     printf("请选择：");
+}
+void  play_game()
+{
+     int ran = 0,i;
+     srand((unsigned)time(NULL));
+     ran = rand()%101;
+     while(1)
+     {
+          printf("猜一个数字：");
+          scanf("%d",&i);
+          if(i<ran)
+          {
+               printf("你猜小了\n");
+          }
+          else if (i>ran)
+          {
+               printf("你猜大了\n");
+          }
+          else
+          {
+               printf("恭喜你，猜对了\n");
+               break;
+          }
+     }
+}
+int main()
+{
+     int input = 1;
+     while(input)
+     {
+          menu();
+         scanf("%d",&input);
+          switch(input)
+          {
+          case PLAY: play_game();break;
+          case EXIT:; break;
+          }
+     }
+     return 0;
+}
