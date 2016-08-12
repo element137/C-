@@ -1,0 +1,171 @@
+头文件：
+#define _CRT_SECURE_NO_WARNINGS
+
+#ifndef _COMMENT_CONVERT_H__
+#define _COMMENT_CONVERT_H__
+
+#include <stdio.h>
+#include <stdlib.h>
+
+enum STATE
+{
+	NULL_STATE,
+	C_STATE,
+	CPP_STATE,
+	END_STATE
+};
+
+void CommentConver();
+void DoConver(FILE* pfIn,FILE * pfOut);
+void DealNull_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate);
+void DealC_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate);
+void DealCPP_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate);
+
+#endif
+
+函数：
+#include "CommentConvert.h"
+void DealCPP_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate)
+{
+	int first = fgetc(pfIn);
+	switch(first)
+	{
+		case EOF:
+			*pstate = END_STATE;
+			break;
+		case '\n':
+			*pstate = NULL_STATE;
+			fputc(first,pfOut);
+			break;
+		default :
+			fputc(first,pfOut);
+			break;
+	}
+}
+void DealC_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate)
+{
+	int first = fgetc(pfIn);
+	int second = 0;
+	int third = 0;
+	switch(first)
+	{
+		case '*':
+			{
+				second = fgetc(pfIn);
+				switch(second)
+				{
+					case '/':
+						{
+							*pstate = NULL_STATE;
+							third = fgetc(pfIn);
+							if(third == '\n')
+								fputc(' ',pfOut);
+							fputc('\n',pfOut);
+							ungetc(third,pfIn);
+						}
+						break;
+					default:
+						ungetc(second,pfIn);
+						fputc(first,pfOut);
+				}
+			}
+			break;
+		case '\n':
+			fputc('\n',pfOut);
+			fputc('/',pfOut);
+			fputc('/',pfOut);
+			break;
+		default:
+			fputc(first,pfOut);
+			break;
+	}
+}
+void DealNull_State(FILE* pfIn,FILE * pfOut,enum STATE *pstate)
+{
+	int first = fgetc(pfIn);
+	int second = 0;
+	switch(first)
+	{
+		case '/':
+		{
+			second = fgetc(pfIn);
+			switch(second)
+			{
+				case '*':
+					*pstate = C_STATE;
+					fputc('/',pfOut);
+					fputc('/',pfOut);
+					break;
+				case '/':
+					*pstate = CPP_STATE;
+					fputc('/',pfOut);
+					fputc('/',pfOut);
+					break;
+				default:
+					fputc(first,pfOut);
+					fputc(second,pfOut);
+					break;
+			}
+		}
+			break;
+		case EOF:
+			*pstate = END_STATE;
+			break;
+		default:
+			fputc(first,pfOut);
+			break;
+	}
+}
+void DoConver(FILE* pfIn,FILE * pfOut)
+{
+	enum STATE state = NULL_STATE;
+	while(state != END_STATE)
+	{
+		switch(state)
+		{
+		case C_STATE:
+			DealC_State(pfIn,pfOut,&state);
+			break;
+		case CPP_STATE:
+			DealCPP_State(pfIn,pfOut,&state);
+			break;
+		case NULL_STATE:
+			DealNull_State(pfIn,pfOut,&state);
+			break;
+		default:
+			break;
+		}
+	}
+}
+void CommentConver()
+{
+	FILE *pfIn = NULL;
+	FILE *pfOut = NULL;
+	pfIn = fopen("input.c","r");
+	if(pfIn == NULL)
+	{
+		perror("input.c");
+		exit(EXIT_FAILURE);
+	}
+	pfOut = fopen("output.c","w");
+	if(pfOut == NULL)
+	{
+		perror("output.c");
+		fclose(pfIn);
+		exit(EXIT_FAILURE);
+	}
+	DoConver(pfIn,pfOut);
+	fclose(pfIn);
+	fclose(pfOut);
+	printf("OK\n");
+}
+
+
+测试：
+#include "CommentConvert.h"
+
+int main ()
+{
+	CommentConver();
+	return 0;
+}
