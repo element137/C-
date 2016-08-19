@@ -1,0 +1,50 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <assert.h>
+int my_strlen (const char *src )
+{
+      int count = 0;
+      assert(src != NULL);
+      while(*src ++ !='\0')
+     {
+           count ++;
+     }
+      return count ;
+}
+void reverse (char * left,char *right)
+{
+      char tmp = '0';
+      while(left <right)
+     {
+           tmp = *left ;
+          * left = *right ;
+          * right = tmp ;
+           left++;
+           right--;
+     }
+}
+void str_reverse (char * src)
+{
+      int sz = my_strlen( src);
+      reverse(src ,src+ sz-1);
+      while(*src !='\0')
+     {
+           char *p = src;
+           while((*src !=' ')&&(* src!='\0' ))
+          {
+               src++;
+          }
+           reverse(p ,src-1);
+           if(*src !='\0')
+          {
+               src++;
+          }
+     }
+}
+int main ()
+{
+      char str []="student a am i";
+      str_reverse(str );
+      printf("%s\n" ,str);
+      return 0;
+}
