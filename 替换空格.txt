@@ -1,0 +1,38 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <string.h>
+void change (char * str,int len)
+{
+      int i = strlen( str);
+      int j = 2 * len + strlen(str );
+      while((i != j) &&( i >= 0))
+      {
+           if(*(str +i) == ' ')
+           {
+              *( str+(j --)) = '0';
+              *( str+(j --)) = '2';
+              *( str+(j --)) = '%';  
+               i--;
+            }
+            else
+                *( str+(j --)) = *(str+( i--));
+      }
+}
+int block (char * str)
+{
+      int count = 0;
+      while(*str )
+     {
+           if(*str ++ == ' ')
+               count++;
+     }
+      return count ;
+}
+int main ()
+{
+      char str [30] = "we are happy.";
+      int len = block( str);
+      change(str ,len);
+      printf("%s\n" ,str);
+      return 0;
+}
