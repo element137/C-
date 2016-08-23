@@ -1,0 +1,31 @@
+void move_str (char * str) 
+{        
+          
+           char tmp = '0';
+           char *right =str+ strlen(str )-1;
+           assert(str != NULL);
+           while(right != str)
+          {
+                    tmp = *str ;
+                   * str = *right ;
+                   * right = tmp ;
+                    right--;
+          }
+}
+void str_rotate (char * str, int len)
+{
+           assert(str != NULL);
+           while(len --)
+          {
+                    move_str(str );
+          }
+}
+int main ()
+{
+           char str [] = "abcdef";
+           int n = 0;
+           scanf("%d" ,&n);
+           str_rotate(str ,n);
+           printf("%s\n" ,str);
+           return 0;
+}
