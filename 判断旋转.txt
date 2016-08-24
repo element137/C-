@@ -1,0 +1,53 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+void move_str (char * str)
+{        
+           char tmp = '0';
+           char *right =str+ strlen(str )-1;
+           assert(str != NULL);
+           while(right != str)
+          {
+                    tmp = *str ;
+                   * str = *right ;
+                   * right = tmp ;
+                    right--;
+          }
+}
+void str_rotate (char * str, int len)
+{
+           assert(str != NULL);
+           while(len --)
+          {
+                    move_str(str );
+          }
+}
+int if_rotate ( char * str, char *key)
+{
+           int len = strlen( str);
+           int n = 0;
+           assert(str != NULL);
+           assert(key != NULL);
+           while (len --)
+          {
+                    str_rotate(str ,1);
+                    if(strcmp (str, key)==0)
+                              return 1;
+          }
+           return 0;
+}
+int main ()
+{
+           char str [] = "AABCD";
+           char key [] = "BCDAA";
+           if(1 == if_rotate (str, key))
+          {
+                    printf("是??\n" );
+          }
+           else if (0 == if_rotate( str,key ))
+          {
+                    printf("不?是??\n" );
+          }
+           return  0;
+}
