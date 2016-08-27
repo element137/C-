@@ -1,0 +1,19 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int my_pow (int num,int k )
+{
+           int ret = 0;
+           if(k == 0)
+                    return 1;                
+           k--;
+           ret = num *my_pow( num,k );
+           return ret ;
+}
+int main ()
+{
+           int num = 0;
+           int k = 0;
+           scanf("%d %d" ,&num,& k);
+           printf("%d\n" ,my_pow( num,k ));
+           return 0;
+}
