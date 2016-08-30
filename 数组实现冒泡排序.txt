@@ -1,0 +1,36 @@
+int bubble_sort(int* arr,int len )  
+{
+     int i = 0;
+     int count = 0;
+     while(len)
+     {
+          for(i = 0 ; i< len ; i ++)
+          {
+
+               if(*(arr+i)>*(arr+i+1))
+               {
+                    *(arr+i)= *(arr+i)^*(arr+i+1);
+                    *(arr+i+1)= *(arr+i)^*(arr+i+1);
+                    *(arr+i)= *(arr+i)^*(arr+i+1);
+                    count++;
+               }
+          }
+          if(count == 0)
+               return 0;
+          len--;
+     }
+     return 0;
+}
+int main ()
+{
+     int i = 0;
+     int arr[] = {1,3,2,4,5,6,7};
+     int len = sizeof(arr)/sizeof(arr[0]);
+     bubble_sort(arr,len-1);
+     for(i = 0; i < len ;i ++)
+     {
+          printf("%d ",arr[i]);
+     }
+     printf("\n");
+     return 0;
+}
