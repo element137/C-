@@ -1,0 +1,36 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<assert.h>
+void quick_sort (int * pa,int len)
+{
+           int *cmp = NULL;
+           int i = 0;
+           assert(pa );
+           while(--len )
+          {
+                    cmp = pa +1;
+                    for(i = 0;i< len;cmp ++,i++)
+                   {
+                              if(*cmp <*pa)
+                             {
+                                      * cmp = *cmp ^*pa;
+                                      * pa = *cmp ^*pa;
+                                      * cmp = *cmp ^*pa;
+                             }
+                   }
+                    pa++;
+          }
+}
+int main ()
+{
+           int i = 0;
+           int a []={2,5,6,3,1,4};
+           int sz = sizeof( a)/sizeof (a[0]);
+           quick_sort(a ,sz);
+           for(i = 0;i < sz ; i ++)
+          {
+                    printf("%d " ,a[ i]);
+          }
+           printf("\n" );
+           return 0;
+}
