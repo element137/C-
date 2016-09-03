@@ -1,0 +1,25 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<assert.h>
+#include<string.h>
+char find_char (const char* str ,int len) 
+{ 
+           int i =0 ; 
+           assert(str ); 
+           for(i = 0; i< len ;i ++) 
+          { 
+                    if((strchr (str,*( str+i )) !=NULL)
+                             &&( strchr((str +i+1),*( str+i ))==NULL)
+                             &&(! strcmp(strchr (str,*( str+i )),strchr(( str+i ),*(str+ i))))) 
+                              return *(str +i); 
+          }
+           return 0; 
+} 
+int main ()
+{
+           char str [] = "aabfqrbdw";
+           char ch = 0;
+           ch = find_char (str, strlen(str ));
+           printf("%c\n" ,ch);
+           return 0;
+}
