@@ -1,0 +1,42 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#define ROWS 3
+#define COLS 3
+
+typedef struct Point
+{
+	int x;
+	int y;
+}Point;   //表示坐标的结构体
+
+Point find_num(int arr[ROWS][COLS], int k, int rows, int cols)   //在二维数组arr中，查找数字k是否存在
+{
+	Point ret = {-1,-1};
+	int row = 0;
+	int col = cols-1;
+	while((row < rows) && (col >= 0))
+	{
+		if(arr[row][col] > k)
+		{
+			col--;
+		}
+		else if(arr[row][col] < k)
+		{
+			row++;
+		}
+		else
+		{
+			ret.x = row;
+			ret.y = col;
+			return ret;
+		}
+	}
+	return ret;
+}
+int main()
+{
+	int arr[ROWS][COLS] = {1,2,3,2,3,4,4,5,6};
+	Point ret = find_num(arr, 4, ROWS, COLS);  //定义ret变量存储坐标   find函数用于查找arr中是否存在数字k
+	printf("%d %d", ret.x, ret.y);
+	return 0;
+}
