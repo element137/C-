@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc,char * argv[])
+{
+	char password[10] = {0};
+	memset(password,0,sizeof(password));
+	strcpy(password,argv[1]);
+	if(0 == strcmp(password,"123456"))
+	{
+		printf("OK");
+	}
+	else 
+	{
+		printf("password error");
+	}
+	return 0;
+}
