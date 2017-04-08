@@ -1,0 +1,258 @@
+Node.h：
+#define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<assert.h>
+#include<string.h>
+#include<stdlib.h>
+typedef int DataType;
+typedef struct Node
+{
+	DataType data;
+	struct Node *next;
+}Node, *PNode;
+void InitNode(PNode* PHead);
+PNode NewNode(DataType data);
+void PushBack(PNode* PHead, DataType data);
+void PopBack(PNode* PHead);
+void PushFront(PNode* PHead, DataType data);
+void PopFront(PNode* PHead);
+PNode Find(PNode* PHead, DataType data);
+void Insert(PNode pos, DataType data);
+void Erase(PNode* pHead, PNode pos);
+void Remove(PNode* pHead, DataType data);
+void RemoveAll(PNode* pHead, DataType data);
+int Empty(PNode pHead);
+void Destroy(PNode* pHead);
+void PrintNode(PNode *PHead);
+
+Node.c:
+#include <Node.h>
+
+void InitNode(PNode* PHead)
+{
+	assert(PHead);
+	*PHead = NULL;
+}
+PNode NewNode(DataType data)
+{
+	PNode New = (PNode)malloc(sizeof(Node));
+	if (New == NULL)
+	{
+		printf("内存开辟失败！");
+	}
+	else
+	{
+		New->data = data;
+		New->next = NULL;
+	}
+	return New;
+}
+
+
+
+void PushBack(PNode* PHead, DataType data)//尾部插入
+{
+	assert(PHead);
+	PNode pre = NULL;
+	PNode late = NULL;
+	if (NULL == *PHead)
+	{
+		*PHead=NewNode(data);
+	}
+	else
+	{
+		pre = *PHead;
+		while (pre->next)
+		{
+			pre = pre->next;
+		}
+		pre->next = NewNode(data);
+	}
+}
+
+
+void PopBack(PNode* PHead)  //尾部删除
+{
+	assert(PHead);
+	PNode pre = *PHead;
+	if (*PHead == NULL)
+	{
+		printf("无数据，无法删除！\n");
+	}
+	else
+	if (pre->next == NULL)
+	{
+		*PHead= NULL;
+		free(pre);
+	}
+	else
+	{
+		while (pre->next->next)
+		{
+			pre = pre->next;
+		}
+		pre->next = NULL;
+	}
+}
+
+
+void PushFront(PNode* PHead, DataType data)  //头部插入
+{
+	assert(PHead);
+	PNode pre = NULL;
+	/*if (NULL == *PHead)
+	{
+		*PHead = NewNode(data);
+	}
+	else
+	{*/
+		pre = NewNode(data);
+		pre->next = *PHead;
+		*PHead = pre;
+	//}
+
+}
+void PopFront(PNode* PHead)   //头部删除
+{
+	assert(PHead);
+	PNode pre = *PHead;
+	if (pre->next == NULL)
+	{
+		*PHead = NULL;
+		free(pre);
+	}
+	else
+	{
+		*PHead = (*PHead)->next;
+		free(pre);
+	}
+}
+PNode Find(PNode* PHead, DataType data)  
+{
+	PNode ret = NULL;
+	PNode pre = *PHead;
+	while (pre)
+	{
+		if (pre->data!= data)
+		{
+			pre = pre->next;
+		}
+		else
+			return pre;
+	}
+	return pre;
+}//查找返回地址
+void Insert(PNode pos, DataType data)
+{
+	PNode pre = NewNode(data);
+	pre->next = pos->next;
+	pos->next = pre;
+}
+void Erase(PNode* pHead, PNode pos)
+{
+	/*assert(pHead&&pos);*/
+	PNode pre = *pHead;
+	if (pos != NULL)
+	{
+		if (pre == pos)
+		{
+			PopFront(pHead);
+		}
+		else
+		{
+			while (pre->next != pos)
+			{
+				pre = pre->next;
+			}
+			pre->next = pos->next;
+			free(pos);
+		}
+	}
+	else
+	{
+		printf("不存在！\n");
+	}
+}
+void Remove(PNode* pHead, DataType data)
+{
+	PNode pre = *pHead;
+	assert(pHead);
+	if (pre->data == data)
+	{
+		PopFront(pHead);
+	}
+	else
+	{
+		while (pre->next)
+		{
+			if (pre->next->data == data)
+			{
+				pre->next = pre->next->next;
+				break;
+			}
+			pre = pre->next;
+		}
+	}	
+}
+void RemoveAll(PNode* pHead, DataType data)
+{
+	PNode pre = *pHead;
+	assert(pHead);
+	if (pre->data == data)
+	{
+		pre = pre->next;
+		PopFront(pHead);
+	}
+	while (pre->next)
+	{
+		if (pre->next->data == data)
+		{
+			if (pre->next->next != NULL)
+				pre->next = pre->next->next;
+			else
+			{
+				pre->next = NULL;
+				break;
+			}
+		}
+		pre = pre->next;
+	}
+}
+int Empty(PNode pHead)
+{
+	if (pHead == NULL)
+		return 0;
+	else
+		return 1;
+}
+void Destroy(PNode* pHead)
+{
+	PNode pre;
+	if ((*pHead)->next != NULL)
+	{
+		pre = (*pHead)->next;
+		free(pre);
+	}
+	(*pHead) = NULL;
+}
+int Size(PNode pHead)
+{
+	PNode pre = pHead;
+	int Count = 0;
+	while (pre)
+	{
+		Count++;
+		pre = pre->next;
+	}
+	return Count;
+}
+void PrintNode(PNode *PHead)
+{
+	assert(PHead);
+	PNode pre = *PHead;
+	while (pre)
+	{
+		printf("%d ",pre->data );
+		pre = pre->next;
+	}
+}

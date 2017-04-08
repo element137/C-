@@ -1,0 +1,251 @@
+SeqList.h:
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
+#define MAXSIZE 10
+typedef int DataType;
+typedef struct strSeqList
+{
+	DataType array[MAXSIZE];
+	int size;  //有效元素个数
+}SeqList,*PSeqList;
+
+
+void InitSeqList(PSeqList pSeqList);
+void PushBack(PSeqList pSeqList, DataType data);
+void PopBack(PSeqList pSeqList);
+void PushFront(PSeqList pSeqList, DataType data);
+void PopFront(PSeqList pSeqList);
+void Insert(PSeqList pSeqList, int pos, DataType data);
+void Erase(PSeqList pSeqList, int pos);
+int Empty(PSeqList pSeqList);
+int Find(PSeqList pSeqList, DataType data);
+void Remove(PSeqList pSeqList, DataType data);
+void RemoveAll(PSeqList pSeqList, DataType data);
+void PrintSeqList(PSeqList pSeqList);
+void BubbleSort(PSeqList pSeqList);
+void SelectSort(PSeqList pSeqList);
+void BinarySearch(PSeqList pSeqList, DataType data);
+
+
+SeqList.c:
+
+#include "Seqlist.h"
+void InitSeqList( PSeqList pSeqList ) //初始化顺序表
+{
+	assert(pSeqList);
+	pSeqList->size = 0;
+	memset( pSeqList->array, 0, sizeof(DataType)*MAXSIZE ); 
+}
+
+void PushBack( PSeqList pSeqList, DataType data )//尾插
+{
+	assert(pSeqList);
+	if( pSeqList->size < MAXSIZE ) 
+	{
+		pSeqList->array[pSeqList->size] = data;
+		pSeqList->size++;
+	}
+}
+
+void PopBack(PSeqList pSeqList) //尾删
+{
+	assert(pSeqList);
+	if(0 == Empty(pSeqList))
+	{
+		printf("顺序表为空");
+	}
+	else
+	{
+		pSeqList->size--;
+	}
+}
+
+void PushFront(PSeqList pSeqList, DataType data) //头插
+{
+	int i = 0;
+	assert( pSeqList&&pSeqList->size > 0&&pSeqList->size < MAXSIZE );
+	for( i=pSeqList->size;i>0;i++ )
+	{
+		pSeqList->array[i] = pSeqList->array[i-1];
+	}
+	pSeqList->array[0] = data;
+	pSeqList->size++;
+}
+
+void PopFront(PSeqList pSeqList)	//头删
+{
+	int i = 0;
+	assert(pSeqList);
+	if( 0 != Empty(pSeqList) )
+	{
+		for ( i=0; i<pSeqList->size-1; i++ )
+		{
+			pSeqList->array[i] = pSeqList->array[i+1];
+		}
+		pSeqList->size--;
+	}
+	else
+	{
+		printf("顺序表为空");
+	}
+}
+
+void Insert(PSeqList pSeqList, int pos, DataType data) //任意位置插入
+{
+	int i = 0;
+	assert (pSeqList&&pos>=0&&pos<MAXSIZE);
+	if(pSeqList->size < MAXSIZE)
+	{
+		for( i=pSeqList->size; i>pos-1; i--)
+		{
+			pSeqList->array[i] = pSeqList->array[i-1];
+		}
+		pSeqList->array[pos-1] = data;
+		pSeqList->size++;
+	}
+}
+void Erase(PSeqList pSeqList, int pos) //任意位置删除
+{ 
+	assert( pSeqList && pos >= 0 && pos < MAXSIZE );
+	if (0 == Empty(pSeqList))
+	{
+		printf("顺序表为空\n");
+		return;
+	}
+	for ( int i = pos - 1; i < pSeqList->size;i++ )
+	{
+		pSeqList->array[i] = pSeqList->array[i + 1];
+	}
+	pSeqList->size--;
+}
+
+int Find(PSeqList pSeqList, DataType data)//找到数据在数组中位置 
+{
+	int ret = 0;
+	assert(pSeqList);
+	if (0 == Empty(pSeqList))
+	{
+		printf("顺序表为空");
+		return ret;
+	}
+	for (int i = 0; i < pSeqList->size; i++)
+	{
+		if (data == pSeqList->array[i])
+		{
+			return i + 1;
+		}
+	}
+	return ret;
+}
+void Remove(PSeqList pSeqList, DataType data)  //移除第一个值为data的元素
+{
+	int pos = 0;
+	assert(pSeqList);
+	if (0 == Empty(pSeqList))
+	{
+		printf("顺序表为空");
+		return;
+	}
+	pos = Find(pSeqList,data);
+	if (-1 != pos)
+	{
+		Erase(pSeqList, pos);
+	}
+	else
+		printf("该元素不存在");
+}
+void RemoveAll(PSeqList pSeqList, DataType data) //移除所有值为data的元素
+{
+	int count = 0;
+	if (0 == Empty(pSeqList))
+	{
+		printf("顺序表为空");
+		return;
+	}
+	for (int i = 0; i < pSeqList->size; i++)
+	{
+		pSeqList->array[i - count] = pSeqList->array[i];
+		if (data == pSeqList->array[i])
+		{
+			count++;
+		}
+	}
+	pSeqList->size -= count;
+}
+void PrintSeqList(PSeqList pSeqList)  //打印顺序表
+{
+	for (int i = 0; i < pSeqList->size; i++)
+	{
+		printf("%d ", pSeqList->array[i]);
+	}
+}
+
+void BubbleSort(PSeqList pSeqList)//冒泡排序
+{
+	int temp = 0;
+	for (int i = 0; i < pSeqList->size - 1; i++)
+	{
+		for (int j = 0; j < pSeqList->size - i - 1;j++)
+		{
+			if (pSeqList->array[j]>pSeqList->array[j + 1])
+			{
+				temp = pSeqList->array[j];
+				pSeqList->array[j] = pSeqList->array[j + 1];
+				pSeqList->array[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void SelectSort(PSeqList pSeqList)   // 选择排序
+{
+	int temp = 0;
+	for (int i = 0; i < pSeqList->size-1; i++)
+	{
+		int min = i;
+		for (int j = i; j < pSeqList->size ;j++)
+		{
+			if (pSeqList->array[min]>pSeqList->array[j])
+			{
+				min = j;
+			}
+		}
+		temp = pSeqList->array[i];
+		pSeqList->array[i] = pSeqList->array[min];
+		pSeqList->array[min] = temp;
+	}
+}
+void BinarySearch(PSeqList pSeqList, DataType data)  //二分查找
+{
+	int mid = 0;
+	int left = 0;
+	int right = pSeqList->size - 1;
+	BubbleSort(pSeqList);
+	if (data >= pSeqList->array[left] && data <= pSeqList->array[right])
+	{
+		while (left<right)
+		{	
+			mid = (left + right) >> 1;
+			if (data > pSeqList->array[mid])
+			{
+				left = mid;
+			}
+			else if (data < pSeqList->array[mid])
+			{
+				right = mid;
+			}
+			else
+			{
+				printf("%d\n", pSeqList->array[mid+1]);
+				break;
+			}
+		}
+	}
+}
+int Empty(PSeqList pSeqList)  //判空
+{
+	return (pSeqList->size?1:0);
+}
